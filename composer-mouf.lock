@@ -923,62 +923,6 @@
             "time": "2015-01-29 16:58:47"
         },
         {
-            "name": "fxp/composer-asset-plugin",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/francoispluchino/composer-asset-plugin.git",
-                "reference": "dbc856439a09f07987de673aa8a264c1b88b0c6b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/francoispluchino/composer-asset-plugin/zipball/dbc856439a09f07987de673aa8a264c1b88b0c6b",
-                "reference": "dbc856439a09f07987de673aa8a264c1b88b0c6b",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "1.0.0",
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "composer/composer": "~1.0@dev"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Fxp\\Composer\\AssetPlugin\\FxpAssetPlugin",
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Fxp\\Composer\\AssetPlugin\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "François Pluchino",
-                    "email": "francois.pluchino@gmail.com"
-                }
-            ],
-            "description": "NPM/Bower Dependency Manager for Composer",
-            "homepage": "https://github.com/francoispluchino/composer-asset-plugin",
-            "keywords": [
-                "asset",
-                "bower",
-                "composer",
-                "dependency manager",
-                "nodejs",
-                "npm",
-                "package"
-            ],
-            "time": "2015-01-25 13:24:06"
-        },
-        {
             "name": "javascript/ace",
             "version": "1.1.8",
             "source": {
@@ -1582,18 +1526,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/thecodingmachine/html.utils.weblibrarymanager.git",
-                "reference": "315ab995fbac718bbc4f64a4f9c97df3c8d7ee51"
+                "reference": "c88c7a5e1ea80c73f5d257a638f17c9d68c76bba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thecodingmachine/html.utils.weblibrarymanager/zipball/315ab995fbac718bbc4f64a4f9c97df3c8d7ee51",
-                "reference": "315ab995fbac718bbc4f64a4f9c97df3c8d7ee51",
+                "url": "https://api.github.com/repos/thecodingmachine/html.utils.weblibrarymanager/zipball/c88c7a5e1ea80c73f5d257a638f17c9d68c76bba",
+                "reference": "c88c7a5e1ea80c73f5d257a638f17c9d68c76bba",
                 "shasum": ""
             },
             "require": {
                 "mouf/html.htmlelement": "~2.0",
                 "mouf/html.renderer": "~1.0",
-                "mouf/html.utils.weblibrarymanager.bower-installer": "~1.0",
                 "mouf/html.utils.weblibrarymanager.component-installer": "~2.1",
                 "mouf/mouf-installer": "~2.0",
                 "php": ">=5.4.0"
@@ -1644,59 +1587,7 @@
                 "javascript",
                 "mouf"
             ],
-            "time": "2014-12-10 15:45:37"
-        },
-        {
-            "name": "mouf/html.utils.weblibrarymanager.bower-installer",
-            "version": "1.0.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/moufmouf/html.utils.weblibrarymanager.bower-installer.git",
-                "reference": "f104f3da17eac5dba36c7cbccf8f1a9e966b4fc9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/moufmouf/html.utils.weblibrarymanager.bower-installer/zipball/f104f3da17eac5dba36c7cbccf8f1a9e966b4fc9",
-                "reference": "f104f3da17eac5dba36c7cbccf8f1a9e966b4fc9",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "1.0.0",
-                "fxp/composer-asset-plugin": "~1.0",
-                "php": ">=5.3.0"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Mouf\\Html\\Utils\\WebLibraryManager\\BowerInstaller\\BowerInstallerPlugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "Mouf\\Html\\Utils\\WebLibraryManager\\BowerInstaller\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "David Négrier",
-                    "email": "d.negrier@thecodingmachine.com",
-                    "homepage": "http://mouf-php.com"
-                }
-            ],
-            "description": "This Mouf package contains a Composer installer that will automatically create WebLibrary instances when a 'bower' package is installed in Composer. It is designed to be used only with Mouf's WebLibraryManager. Bower compatibility provided thanks to francoispluchino/composer-asset-plugin",
-            "homepage": "http://mouf-php/packages/mouf/html.utils.weblibrarymanager.bower-installer",
-            "keywords": [
-                "bower",
-                "css",
-                "dependencies",
-                "dependency",
-                "html",
-                "javascript",
-                "mouf"
-            ],
-            "time": "2014-12-10 15:22:15"
+            "time": "2015-02-12 13:38:09"
         },
         {
             "name": "mouf/html.utils.weblibrarymanager.component-installer",
