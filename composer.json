@@ -14,7 +14,7 @@
 		"issues" : "https://github.com/thecodingmachine/mouf/issues",
 		"source" : "https://github.com/thecodingmachine/mouf/"
 	},
-	"type" : "mouf-framework",
+	"type" : "library",
 	"license" : "MIT",
 	"authors" : [{
 			"name" : "David Négrier",
