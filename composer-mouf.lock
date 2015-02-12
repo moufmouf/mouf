@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a7b0930e4ff932c39ce0f0094f8fca28",
+    "hash": "b4dcc8f40a80d766fbb22a28a55b87de",
     "packages": [
         {
             "name": "acclimate/container",
@@ -1578,7 +1578,7 @@
         },
         {
             "name": "mouf/html.utils.weblibrarymanager",
-            "version": "v3.0.0",
+            "version": "3.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thecodingmachine/html.utils.weblibrarymanager.git",
