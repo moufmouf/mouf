@@ -42,7 +42,7 @@ class SplashModule implements HttpModuleInterface
             define('ROOT_URL', "/");
         }
 
-        define('ROOT_PATH', dirname(dirname(dirname(__DIR__))).'/');
+        define('ROOT_PATH', dirname(dirname(dirname(dirname(dirname(dirname(__DIR__)))))).'/');
     }
 
     public function getHttpMiddleware(HttpKernelInterface $app) {
