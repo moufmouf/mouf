@@ -1321,18 +1321,7 @@ class '.$this->oldv20className.' {
 		return $this->container->getErrorOnInstanceCode($instanceName);
 		
 	}
-	
-	/**
-	 * Returns the type of an instance defined by callback.
-	 * For this, the instanciation code will be executed and the result will be returned.
-	 *
-	 * @param string $instanceName The name of the instance to analyze.
-	 * @return string
-	 */
-	private function findInstanceByCallbackType($instanceName) {
-		return $this->container->findInstanceByCallbackType($instanceName);
-	}
-	
+
 	/**
 	 * If set, all dependencies lookup will be delegated to this container.
 	 * 
