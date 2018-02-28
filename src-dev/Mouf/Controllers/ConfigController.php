@@ -9,6 +9,7 @@
  */
 namespace Mouf\Controllers;
 
+use Mouf\MoufConfigManager;
 use Mouf\MoufManager;
 
 use Mouf\Mvc\Splash\Controllers\Controller;
@@ -123,6 +124,7 @@ class ConfigController extends Controller {
 	protected $type;
 	protected $comment;
     protected $fetchFromEnv;
+    protected $envName;
 
 	/**
 	 * Displays the screen to register a constant definition.
@@ -132,7 +134,7 @@ class ConfigController extends Controller {
 	 * @param string $name
 	 * @param string $selfedit
 	 */
-	public function register($name = null, $defaultvalue = null, $value = null, $type = null, $comment = null, $fetchFromEnv = null, $selfedit = "false") {
+	public function register($name = null, $defaultvalue = null, $value = null, $type = null, $comment = null, $fetchFromEnv = null, $envName = null, $selfedit = "false") {
 		$this->selfedit = $selfedit;
 		
 		if ($selfedit == "true") {
@@ -149,7 +151,8 @@ class ConfigController extends Controller {
 		$this->type = $type;
 		$this->comment = $comment;
         $this->fetchFromEnv = $fetchFromEnv;
-		
+        $this->envName = $envName;
+
 		if ($name != null) {
 			$def = $this->configManager->getConstantDefinition($name);
 			if ($def != null) {
@@ -173,7 +176,11 @@ class ConfigController extends Controller {
 				}
 			}
 		} else {
-            $this->fetchFromEnv = true;
+            $this->fetchFromEnv = MoufConfigManager::FROM_ENV_WITH_FALLBACK;
+        }
+
+        if ($this->envName === $name) {
+            $this->envName = null;
         }
 
 		// TODO: manage type!
@@ -195,7 +202,7 @@ class ConfigController extends Controller {
  	 * @param string $type
  	 * @param string $selfedit
 	 */
-	public function registerConstant($name, $comment, $type, $defaultvalue = "", $value = "", $selfedit = "false") {
+	public function registerConstant($name, $comment, $type, $fetchFromEnv, $defaultvalue = "", $value = "", $envName = null, $selfedit = "false") {
 		$this->selfedit = $selfedit;
 		
 		if ($selfedit == "true") {
@@ -223,8 +230,12 @@ class ConfigController extends Controller {
 				$defaultvalue = false;
 			}
 		}
+
+		if (empty($envName)) {
+            $envName = $name;
+        }
 		
-		$this->configManager->registerConstant($name, $type, $defaultvalue, $comment);
+		$this->configManager->registerConstant($name, $type, $defaultvalue, $comment, (int) $fetchFromEnv, $envName);
 		$this->moufManager->rewriteMouf();
 		
 		// Now, let's write the constant for our environment:

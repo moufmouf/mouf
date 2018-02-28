@@ -26,6 +26,7 @@ if (!empty($this->constantsList)) {
 	foreach ($this->constantsList as $key=>$def) {
 		echo '<div class="constant">';
 		echo '<div>';
+		$fetchFromEnv = isset($def['fetchFromEnv']) ? $def['fetchFromEnv'] : \Mouf\MoufConfigManager::NO_ENV;
 		if (!$def["defined"]) {
 			// TODO: correctly display bool
 			echo "<div class='warning'>This constant '".plainstring_to_htmlprotected($key)."' is present in the <code>config.php</code> file but not declared in Mouf. <a href='register?name=".urlencode($key)."'>Please declare this value</a>.</div>";
@@ -39,27 +40,36 @@ if (!empty($this->constantsList)) {
 		//echo '<input type="text" value="'.plainstring_to_htmlprotected($key).'" /> => ';
 		echo '<label class="control-label">'.plainstring_to_htmlprotected($key).'</label>';
 		echo '<div class="controls">';
-		if (isset($def['type']) && $def['type'] == 'bool') {
-			$val = isset($def['value'])?$def['value']:$def['defaultValue'];
-			echo '<input type="checkbox" name="'.plainstring_to_htmlprotected($key).'" value="true" '.(($val==true)?"checked='checked' ":"").' />';
+		if ($fetchFromEnv === \Mouf\MoufConfigManager::NO_ENV) {
+            if (isset($def['type']) && $def['type'] == 'bool') {
+                $val = isset($def['value']) ? $def['value'] : $def['defaultValue'];
+                echo '<input type="checkbox" name="' . plainstring_to_htmlprotected($key) . '" value="true" ' . (($val == true) ? "checked='checked' " : "") . ' />';
+            } else {
+                echo '<input type="text" name="' . plainstring_to_htmlprotected($key) . '" value="' . plainstring_to_htmlprotected(isset($def['value']) ? $def['value'] : $def['defaultValue']) . '" />';
+            }
 		} else {
-			echo '<input type="text" name="'.plainstring_to_htmlprotected($key).'" value="'.plainstring_to_htmlprotected(isset($def['value'])?$def['value']:$def['defaultValue']).'" />';
-		}
+            echo '<span class="label label-success">Fetched from environment</span>';
+            if ($fetchFromEnv !== \Mouf\MoufConfigManager::NO_ENV && isset($def['envName']) && $def['envName'] !== $key) {
+                echo ' mapped to environment variable <code>'.$def['envName'].'</code>';
+            }
+
+            if ($fetchFromEnv == \Mouf\MoufConfigManager::FROM_ENV_WITH_FALLBACK) {
+                echo ' <span class="label label-info">Optional</span>';
+            } else {
+                echo ' <span class="label label-important">Compulsory</span>';
+            }
+        }
 		echo "<a href='register?name=".urlencode($key)."'><img src='".ROOT_URL."vendor/mouf/famfamfam/icons/pencil.png' alt='Edit' /></a>";
 		echo "<img src='".ROOT_URL."vendor/mouf/famfamfam/icons/cross.png' alt='Delete' onclick='deleteConstant(\"".plainstring_to_htmlprotected($key)."\")' />";
 		echo '<span class="help-block">';
 		if ($def["defined"]) {
 			echo nl2br($def['comment'])."<br/>";
-			if ($def['type'] == 'bool') {
-				echo "<em>Default value: '".($def['defaultValue']?"true":"false")."'.</em>";
-			} else {
-				echo "<em>Default value: '".plainstring_to_htmlprotected($def['defaultValue'])."'.</em>";
-			}
-			echo '<br/>Fetch from environment variables (in priority): ';
-			if (isset($def['fetchFromEnv']) && $def['fetchFromEnv']) {
-                echo '<span class="label label-success">Yes</span>';
-            } else {
-			    echo '<span class="label label-important">No</span>';
+			if ($fetchFromEnv !== \Mouf\MoufConfigManager::FROM_ENV_NO_FALLBACK) {
+                if ($def['type'] == 'bool') {
+                    echo "<em>Default value: '" . ($def['defaultValue'] ? "true" : "false") . "'.</em>";
+                } else {
+                    echo "<em>Default value: '" . plainstring_to_htmlprotected($def['defaultValue']) . "'.</em>";
+                }
             }
 		}
 		echo '</span>';

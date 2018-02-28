@@ -14,6 +14,30 @@ ini_set('display_errors', 1);
 // Add E_ERROR to error reporting it it is not already set
 error_reporting(E_ERROR | error_reporting());
 
+require_once __DIR__.'/../../../../../vendor/autoload.php';
+require_once __DIR__.'/../../../../../mouf/MoufComponents.php';
+
+
+$configManager = \Mouf\MoufManager::getMoufManager()->getConfigManager();
+// TODO: FILL THE MISSING COMPULSORY ENVIRONMENT VARIABLES.
+
+$definedConstants = $configManager->getDefinedConstants();
+foreach ($definedConstants as $constant) {
+    if (isset($constant["fetchFromEnv"]) && $constant["fetchFromEnv"] === \Mouf\MoufConfigManager::FROM_ENV_NO_FALLBACK) {
+// TODO INITIATE THE ENVIRONMENT VARIABLES
+// TODO
+// TODO
+// TODO
+// TODO
+// TODO
+// TODO
+// TODO
+// TODO
+    }
+//    "fetchFromEnv"=>true|false, "envName"=>"the environment variable to map to"
+}
+
+
 if (!isset($_REQUEST["selfedit"]) || $_REQUEST["selfedit"]!="true") {
 	$fileName = dirname(__FILE__)."/../../../../../config.php";
 } else {

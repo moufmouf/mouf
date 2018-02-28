@@ -20,6 +20,10 @@ use Mouf\Reflection\MoufReflectionProxy;
 
 class MoufConfigManager {
 
+    const NO_ENV = 0;
+    const FROM_ENV_WITH_FALLBACK = 1;
+    const FROM_ENV_NO_FALLBACK = 2;
+
 	private $constants = null;
 	
 	private $configFileName;
@@ -27,7 +31,7 @@ class MoufConfigManager {
 	/**
 	 * The array containing the configuration constants in the form:
 	 * 
-	 * $constantsDef["variableName"] = array("defaultValue"=>"", "type"=>"string|int|float|bool", "comment"=>"some comment", "fetchFromEnv"=>true|false);
+	 * $constantsDef["variableName"] = array("defaultValue"=>"", "type"=>"string|int|float|bool", "comment"=>"some comment", "fetchFromEnv"=>0|1|2, "envName"=>"the environment variable to map to");
 	 *
 	 * @var array
 	 */
@@ -124,15 +128,23 @@ class MoufConfigManager {
 						$commentStr .= " */\n";
 						fwrite($fp, $commentStr);
 					}
-                    $fetchFromEnv = isset($def['fetchFromEnv']) && $def['fetchFromEnv'];
+                    $fetchFromEnv = isset($def['fetchFromEnv']) ? $def['fetchFromEnv'] : self::NO_ENV;
 				} else {
 				    $value = $this->constants[$key];
-                    $fetchFromEnv = false;
+                    $fetchFromEnv = self::NO_ENV;
 				}
-				if ($fetchFromEnv) {
-                    fwrite($fp, "define(".var_export($key, true).", getenv(".var_export($key, true).") !== false?getenv(".var_export($key, true)."):".var_export($value, true).");\n");
+				if ($fetchFromEnv == self::NO_ENV) {
+                    fwrite($fp, "define(" . var_export($key, true) . ", ".var_export($value, true).");\n");
+                } elseif ($fetchFromEnv === self::FROM_ENV_NO_FALLBACK) {
+                    fwrite($fp, 'if (getenv(' . var_export($key, true) . ") === false) {
+    throw new RuntimeException(\"The environment variable " . var_export($key, true) . ' must be set.");
+}
+');
+                    fwrite($fp, "define(" . var_export($key, true) . ", ".var_export($value, true).");\n");
+                } elseif ($fetchFromEnv == self::FROM_ENV_WITH_FALLBACK) {
+                    fwrite($fp, "define(" . var_export($key, true) . ", getenv(".var_export($key, true).") !== false?getenv(".var_export($key, true)."):".var_export($value, true).");\n");
                 } else {
-                    fwrite($fp, "define(".var_export($key, true).", ".var_export($value, true).");\n");
+				    throw new MoufException('Unexpected fetchFromEnv value: '.$fetchFromEnv);
                 }
 			}
 		
@@ -143,22 +155,28 @@ class MoufConfigManager {
 			opcache_invalidate($filePath);
 		}
 	}
-	
-	/**
-	 * Registers a new constant.
-	 * Note: this will not set the value of the constant, just register it.
-	 *
-	 * @param string $name
-	 * @param string $type
-	 * @param string $defaultValue
-	 * @param string $comment
-	 */
-	public function registerConstant($name, $type, $defaultValue, $comment, $fetchFromEnv = true) {
+
+    /**
+     * Registers a new constant.
+     * Note: this will not set the value of the constant, just register it.
+     *
+     * @param string $name
+     * @param string $type
+     * @param string $defaultValue
+     * @param string $comment
+     * @param bool $fetchFromEnv
+     * @param int $envName
+     * @throws MoufException
+     */
+	public function registerConstant($name, $type, $defaultValue, $comment, $fetchFromEnv = true, $envName = null) {
 		if ($type != "string" && $type != "int" && $type != "float" && $type != "bool") {
 			throw new MoufException("Invalid type for constant. Must be one of: string|int|float|bool. Value passed: '".$type."'");
 		}
 		
 		$this->constantsDef[$name] = array("defaultValue"=>$defaultValue, "type"=>$type, "comment"=>$comment, "fetchFromEnv"=>$fetchFromEnv);
+		if (!empty($envName)) {
+            $this->constantsDef[$name]['envName'] = $envName;
+        }
 	}
 	
 	/**

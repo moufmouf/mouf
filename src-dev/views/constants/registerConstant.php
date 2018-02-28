@@ -34,6 +34,29 @@ jQuery(document).ready(function() {
 			jQuery("#textvalue").removeAttr("disabled");
 		}
 	});
+
+    var changePlaceHolder = function() {
+        jQuery('input[name=envName]').attr('placeholder', jQuery('input[name=name]').val());
+    };
+
+    var switchEnvFields = function() {
+        var fetchFromEnvVal = jQuery('select[name=fetchFromEnv]').val();
+        if (fetchFromEnvVal == '0') {
+            jQuery('.envSpecific').hide();
+            jQuery('.constValueField').show();
+        } else if (fetchFromEnvVal == '1') {
+            jQuery('.envSpecific').show();
+            jQuery('.constValueField').show();
+        } else if (fetchFromEnvVal == '2') {
+            jQuery('.envSpecific').show();
+            jQuery('.constValueField').hide();
+        }
+    };
+
+    changePlaceHolder();
+    switchEnvFields();
+    jQuery('input[name=name]').keyup(changePlaceHolder);
+    jQuery('select[name=fetchFromEnv]').change(switchEnvFields);
 });
 </script>
 
@@ -69,6 +92,26 @@ if ($this->type == "bool") {
 </div>
 
 <div class="control-group">
+    <label class="control-label">Fetch from environment variable:</label>
+    <div class="controls">
+        <select name="fetchFromEnv">
+            <option value="0" <?php if ($this->fetchFromEnv == 0): ?>selected="selected"<?php endif ?>>No</option>
+            <option value="1" <?php if ($this->fetchFromEnv == 1): ?>selected="selected"<?php endif ?>>Yes, fallback to config file</option>
+            <option value="2" <?php if ($this->fetchFromEnv === 2): ?>selected="selected"<?php endif ?>>Yes, no fallback (environment variable MUST exist)</option>
+        </select>
+        <span class="help-block">Environment variables are used in priority over the stored configuration. Configuration is used as a fallback if environment variable is not set.</span>
+    </div>
+</div>
+
+<div class="control-group envSpecific">
+    <label class="control-label">Maps to environment variable:</label>
+    <div class="controls">
+        <input name="envName" type="text" value="<?php echo plainstring_to_htmlprotected($this->envName); ?>" placeholder="" />
+        <span class="help-block">If empty, the name of the constant is used instead.</span>
+    </div>
+</div>
+
+<div class="control-group constValueField">
 <label class="control-label">Default value:</label>
 <div class="controls">
 	<input id="booldefaultvalue" <?php echo $hideBool ?> type="checkbox" name="defaultvalue" value="true" <?php echo $this->defaultvalue?"checked='checked'":""; ?> />
@@ -76,7 +119,7 @@ if ($this->type == "bool") {
 </div>
 </div>
 
-<div class="control-group">
+<div class="control-group constValueField">
 <label class="control-label">Value:</label>
 <div class="controls">
 	<input id="boolvalue" <?php echo $hideBool ?> type="checkbox" name="value" value="true" <?php echo $this->value?"checked='checked'":""; ?> />
@@ -89,14 +132,6 @@ if ($this->type == "bool") {
 <div class="controls">
 	<textarea name="comment"><?php echo plainstring_to_htmlprotected($this->comment); ?></textarea>
 </div>
-</div>
-
-<div class="control-group">
-    <label class="control-label">Fetch from environment variable:</label>
-    <div class="controls">
-        <input type="checkbox" name="fetchFromEnv" value="true" <?php echo $this->fetchFromEnv?"checked='checked'":""; ?> />
-        <span class="help-block">Environment variables are used in priority over the stored configuration. Configuration is used as a fallback if environement variable is not set.</span>
-    </div>
 </div>
 
 <?php // Type ?>
